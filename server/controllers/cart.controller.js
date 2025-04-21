@@ -40,12 +40,12 @@ export const addOrUpdateCartItem= async (req, res)=>{
     }
 }
 
-// – Add/update item
 // - DELETE /api/cart/:itemId
 export const deleteCartItem = async (req, res) => {
-    const { itemId } = req.params;
+    
   
     try {
+      const  itemId  = req.params.itemId;
       const deleted = await CartItem.findOneAndDelete({ _id: itemId, userId: req.user._id });
   
       if (!deleted) {
@@ -57,3 +57,13 @@ export const deleteCartItem = async (req, res) => {
       res.status(500).json({ error: 'Failed to delete cart item' });
     }
 };
+
+// DELETE /api/cart
+export const clearCart = async (req, res) => {
+    try {
+      await CartItem.deleteMany({ userId: req.user._id });
+      res.status(200).json({ message: 'Cart cleared' });
+    } catch (err) {
+      res.status(500).json({ error: 'Failed to clear cart' });
+    }
+  };
