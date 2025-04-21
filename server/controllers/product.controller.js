@@ -5,11 +5,10 @@ import products from '../data/products.js'
 
 export const seedProducts = async (req, res) => {
   try {
-    // Optional: Clean old data
+    // delete old data
     await Product.deleteMany();
-    // console.log('🗑️ Old product data removed');
-
-    // Only pick fields that are defined in your schema
+    
+    // pushing only the defined data in schema
     const filteredProducts = products.data.map((p) => ({
       title: p.title,
       description: p.description,
@@ -20,6 +19,7 @@ export const seedProducts = async (req, res) => {
 
     // Insert data
     const productsInDB =await Product.insertMany(filteredProducts);
+    
     //Products saved successfully
     res.status(201).json({
       message: "Products seeded successfully",
@@ -31,3 +31,16 @@ export const seedProducts = async (req, res) => {
     res.status(500).json({ message: "Could not add data to DB"})    
   }
 };
+
+
+export const getAllProducts= async(req, res)=>{
+  try {
+    const products= await Product.find();
+
+    res.json(products)
+    
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch products' });
+  }
+}
+
