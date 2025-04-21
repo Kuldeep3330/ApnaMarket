@@ -45,3 +45,24 @@ export const getUserOrders = async (req, res) =>{
         res.status(500).json({ error: 'Failed to fetch orders' });
     }
 }
+
+//get order by id
+export const getOrderById= async (req, res)=>{
+    try {
+        const id=req.param.id
+        const order= await Order.findById(id).populate('items.productId')
+
+        if(!order)
+            return res.status(404).json({error:'Order not found'})
+
+        //stoping unauthorized user to access data
+        if (order.userId.toString() !== req.user._id.toString() && req.user.role !== 'admin') {
+            return res.status(403).json({ error: 'Forbidden' });
+          }
+
+          res.status(200).json(order);
+        
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to fetch order' });
+    }
+}
