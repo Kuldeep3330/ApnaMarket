@@ -20,15 +20,16 @@ export const placeOrder= async (req, res)=>{
             (acc, item) => acc + item.quantity * item.priceAtPurchase,0);
 
         const newOrder= new Order({
-            userId,
+            userId: req.user._id,
             items: orderItems,
             total,
         })
 
         const saved=await newOrder.save();
-        console.log('order placed', saved);        
+        // console.log('order placed', saved);        
 
-        await CartItem.deleteMany({ userId });         
+        await CartItem.deleteMany({ userId: req.user._id, });          
+        res.status(201).json(saved);
             
     } catch (error) {
         res.status(500).json({ error: 'Failed to place order' });
@@ -49,8 +50,8 @@ export const getUserOrders = async (req, res) =>{
 //get order by id
 export const getOrderById= async (req, res)=>{
     try {
-        const id=req.param.id
-        const order= await Order.findById(id).populate('items.productId')
+        
+        const order= await Order.findById(req.params.id).populate('items.productId')
 
         if(!order)
             return res.status(404).json({error:'Order not found'})
