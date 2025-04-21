@@ -42,3 +42,18 @@ export const addOrUpdateCartItem= async (req, res)=>{
 
 // – Add/update item
 // - DELETE /api/cart/:itemId
+export const deleteCartItem = async (req, res) => {
+    const { itemId } = req.params;
+  
+    try {
+      const deleted = await CartItem.findOneAndDelete({ _id: itemId, userId: req.user._id });
+  
+      if (!deleted) {
+        return res.status(404).json({ error: 'Cart item not found' });
+      }
+  
+      res.status(200).json({ message: 'Item removed from cart' });
+    } catch (err) {
+      res.status(500).json({ error: 'Failed to delete cart item' });
+    }
+};
