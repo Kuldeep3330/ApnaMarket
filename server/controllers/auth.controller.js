@@ -2,7 +2,7 @@ import { User } from "../models/user.model.js";
 
 export const registerUser= async(req, res)=>{
     try {
-        const {name, email, password}= req.body
+        const {name, email, password, role}= req.body
 
     //check if user already exists
     const user= await User.findOne({email})
@@ -12,7 +12,7 @@ export const registerUser= async(req, res)=>{
 
     //if not exists
     //create one
-    const newUser= await User.create({name, email, password})
+    const newUser= await User.create({name, email, password,role})
 
     const token= newUser.generateJWT();
 
