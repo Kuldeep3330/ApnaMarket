@@ -30,3 +30,39 @@ export const registerUser= async(req, res)=>{
     }
 
 }
+
+///login a user
+export const loginUser= async (req, res)=>{
+    try {
+        const {email, password}= req.body
+
+        //check user exists or not
+        const user =  await User.findOne({email})
+
+        if(!user){
+            res.status(401).json({message:"user not exists || invalid credentials"})
+        }
+
+        //if found
+        //s1. commpare password
+        const isMatch= await user.isPasswordCorrect(password);
+
+        if(!isMatch){
+            res.status(401).json({message:"user not exists || invalid credentials"})
+        }
+
+        //if password matches
+        const token= user.generateJWT()
+        res.status(200).json({
+            user: {
+              _id: user._id,
+              name: user.name,
+              email: user.email,
+              role: user.role,
+            },
+            token,
+          });
+        } catch (error) {
+          res.status(500).json({ message: 'Server error', error: error.message });
+        }
+}
