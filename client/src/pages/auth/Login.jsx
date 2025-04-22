@@ -12,7 +12,7 @@ export default function Login() {
     e.preventDefault();
     try {
       await login(form.email, form.password);
-      navigate("/"); // redirect to home
+      navigate("/products");
     } catch (err) {
       alert("Login failed");
     }

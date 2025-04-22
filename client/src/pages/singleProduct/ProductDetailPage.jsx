@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useCart } from '../../context/CartContext';
+import { Link} from "react-router-dom";
+
 import './ProductDetailPage.css';
 
 const ProductDetailPage = () => {

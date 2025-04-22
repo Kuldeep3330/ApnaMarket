@@ -8,6 +8,7 @@ import ProductsPage from './pages/allProduct/ProductsPage';
 import ProductDetailPage from './pages/singleProduct/ProductDetailPage';
 import { CartProvider } from './context/CartContext';
 import CartPage from './pages/CartPage';
+import NotFound from './pages/NotFound';
 
 function App() {
   return (
@@ -16,12 +17,13 @@ function App() {
       <Router>
         <Navbar/>
         <Routes>
+        {/* <Route path="/" element={<Home />} /> */}
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/products" element={<ProductsPage />} />
           <Route path="/products/:id" element={<ProductDetailPage/>} />
           <Route path="/cart" element={<CartPage />} />
-          {/* Add your protected and home routes here */}
+          {/* <Route path="*" element={<NotFound />} /> */}
         </Routes>
       </Router>
       </CartProvider>

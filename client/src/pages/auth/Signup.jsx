@@ -12,7 +12,7 @@ export default function Signup() {
     e.preventDefault();
     try {
       await signup(form.name, form.email, form.password);
-      navigate("/"); // redirect to home
+      navigate("/products"); 
     } catch (err) {
       alert("Signup failed");
     }

@@ -18,17 +18,9 @@ export const AuthProvider = ({ children }) => {
     return data;
   };
 
-  const logout = async () => {
-    await axios.post("/api/v1/auth/logout");
-    setUser(null);
-  };
-
-  useEffect(() => {
-    // optionally fetch user on page reload
-  }, []);
 
   return (
-    <AuthContext.Provider value={{ user, login, signup, logout }}>
+    <AuthContext.Provider value={{ user, login, signup }}>
       {children}
     </AuthContext.Provider>
   );
