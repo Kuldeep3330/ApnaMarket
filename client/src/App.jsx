@@ -5,7 +5,7 @@ import Signup from "./pages/auth/Signup";
 import { AuthProvider } from "./context/AuthContext";
 import Navbar from './components/Navbar';
 import ProductsPage from './pages/allProduct/ProductsPage';
-import ProductDetailPage from './pages/ProductDetailPage';
+import ProductDetailPage from './pages/singleProduct/ProductDetailPage';
 import { CartProvider } from './context/CartContext';
 import CartPage from './pages/CartPage';
 
