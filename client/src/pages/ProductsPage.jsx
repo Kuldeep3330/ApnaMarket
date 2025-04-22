@@ -1,5 +1,5 @@
-// src/pages/ProductsPage.jsx
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import './ProductsPage.css';
 
 const ProductsPage = () => {
@@ -30,13 +30,17 @@ const ProductsPage = () => {
       ) : (
         <div className="products-grid">
           {products.map((product) => (
-            <div className="product-card" key={product._id}>
+            <Link
+              to={`/products/${product._id}`}
+              className="product-card"
+              key={product._id}
+            >
               <img src={product.images[0]} alt={product.title} />
               <h3>{product.title}</h3>
               <p>{product.description}</p>
               <p><strong>${product.price}</strong></p>
               <p>Stock: {product.stock}</p>
-            </div>
+            </Link>
           ))}
         </div>
       )}
