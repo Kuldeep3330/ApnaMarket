@@ -13,6 +13,7 @@ export const AuthProvider = ({ children }) => {
     const { data } = await axios.post("/api/v1/auth/login", { email, password });
     setUser(data.user);
     localStorage.setItem("user", JSON.stringify(data.user));
+    localStorage.setItem("userToken", data.token);
     return data;
   };
 

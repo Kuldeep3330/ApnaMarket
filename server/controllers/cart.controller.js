@@ -5,7 +5,20 @@ import { Product } from "../models/product.model.js";
 export const getCart = async (req, res) => {
     try {
       const items = await CartItem.find({ userId: req.user._id }).populate('productId');
-      res.status(200).json(items);
+
+      const updatedData = items.map(item => {
+        // Rename productId to product
+        return {
+          ...item,
+          product: item.productId,
+          productId: undefined 
+        };
+      });
+      
+      const cleanedData = updatedData.map(({ productId, ...rest }) => rest);
+      console.log(cleanedData, updatedData);       
+
+      res.status(200).json(updatedData);
     } catch (error) {
       res.status(500).json({ error: 'Failed to fetch cart items' });
     }
@@ -34,23 +47,37 @@ export const addOrUpdateCartItem= async (req, res)=>{
 
         }
         await cartItem.save();
-        res.status(200).json(cartItem);
+
+        const updatedData = cartItem.map(item => {
+          return {
+            ...item,
+            product: item.productId,
+            productId: undefined 
+          };
+        });
+
+        const cleanedData = updatedData.map(({ productId, ...rest }) => rest);
+        console.log(cleanedData, updatedData);       
+
+        res.status(200).json(updatedData);
     } catch (error) {
         res.status(500).json({ error: 'Failed to add/update cart item' });
     }
 }
 
 // - DELETE /api/cart/:itemId
-export const deleteCartItem = async (req, res) => {
-    
-  
+export const deleteCartItem = async (req, res) => {   
     try {
+
       const  itemId  = req.params.itemId;
-      const deleted = await CartItem.findOneAndDelete({ _id: itemId, userId: req.user._id });
-  
+      const deleted = await CartItem.findOneAndDelete({ productId: itemId, userId: req.user._id });
+      console.log(deleted, itemId, req.params, req.user);
+      
       if (!deleted) {
+        
         return res.status(404).json({ error: 'Cart item not found' });
       }
+    
   
       res.status(200).json({ message: 'Item removed from cart' });
     } catch (err) {

@@ -6,20 +6,39 @@ import { AuthProvider } from "./context/AuthContext";
 import Navbar from './components/Navbar';
 import ProductsPage from './pages/allProduct/ProductsPage';
 import ProductDetailPage from './pages/singleProduct/ProductDetailPage';
-// import { CartProvider } from './context/CartContext';
 import CartPage from './pages/CartPage';
-import { useState } from 'react';
-
-
-
-
-
-
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 
 function App() {
+
   const [cart, setCart] = useState([]);
-  const addToCart = (product, quantity) => {
-    
+  const handleFetchCart = async () => {
+    const token = localStorage.getItem('userToken');
+  
+    try {
+      const response = await axios.get('http://localhost:3001/api/v1/cart/', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        withCredentials: true,
+      });
+  
+      console.log('Cart Data:', response.data);
+      setCart(response.data);
+
+    } catch (error) {
+      console.error('Error fetching cart:', error);
+      alert('Failed to fetch cart.');
+    }
+  };
+
+  useEffect(()=>{
+    handleFetchCart()
+
+  },[])
+  
+  const addToCart = (product, quantity) => {  
   
     setCart((prevCart) => {
       const index = prevCart.findIndex(item => item.product._id === product._id);
@@ -31,19 +50,59 @@ function App() {
       return [...prevCart, { product, quantity }];
     });
   };
+
+  const handleRemoveCartItem = async (itemId) => {
+    const token = localStorage.getItem('userToken');
+  
+    try {
+      const response = await axios.delete(`http://localhost:3001/api/v1/cart/${itemId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        withCredentials: true,
+      });
+  
+      console.log('Item removed from cart:', response.data);
+      alert('Item removed successfully!');
+    } catch (error) {
+      console.error('Failed to remove item:', error);
+      alert('Failed to remove item from cart.');
+    }
+  };
+
   
   const removeFromCart = (productId) => {
+    handleRemoveCartItem(productId)
     setCart((prevCart) => prevCart.filter(item => item.product._id !== productId));
   };
 
-  const clearCart = () => setCart([]);
-
+  const handleClearCart = async () => {
+    const token = localStorage.getItem('userToken');
   
+    try {
+      const response = await axios.delete('http://localhost:3001/api/v1/cart/', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        withCredentials: true,
+      });
+  
+      console.log('Cart cleared:', response.data);
+      alert('Cart cleared successfully!');
+    } catch (error) {
+      console.error('Failed to clear cart:', error);
+      alert('Failed to clear cart.');
+    }
+  };
+
+  const clearCart = () => {
+    handleClearCart();
+    setCart([])
+  }; 
   
   
   return (
     <AuthProvider>
-      {/* <CartProvider> */}
       <Router>
         <Navbar/>
         <Routes>
@@ -66,7 +125,6 @@ function App() {
           
         </Routes>
       </Router>
-      {/* </CartProvider> */}
     </AuthProvider>
   );
 }

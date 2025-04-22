@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import './ProductDetailPage.css';
+import axios from 'axios';
 
 const ProductDetailPage = ({ addToCart }) => {
   const { id } = useParams();
@@ -24,8 +25,41 @@ const ProductDetailPage = ({ addToCart }) => {
     fetchProduct();
   }, [id]);
 
+ 
+
+const handleAddToCartAPICall = async (productId,quantity ) => {
+  const token = localStorage.getItem('userToken');
+
+  try {
+    const response = await axios.post(
+      'http://localhost:3001/api/v1/cart/',
+      {
+        productId, 
+        quantity
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        withCredentials: true
+      }
+    );
+
+    console.log('Item added to cart:', response.data);
+    alert('Item added to cart!');
+  } catch (error) {
+    console.error('Failed to add to cart:', error);
+    alert('Failed to add item to cart.');
+  }
+};
+
+
   const handleAddToCart = () => {
     if (product && quantity <= product.stock) {
+
+      handleAddToCartAPICall(product, quantity)
+
       addToCart(product, quantity);
       alert(`${quantity} item(s) added to cart!`);
     } else {

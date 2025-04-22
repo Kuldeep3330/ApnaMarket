@@ -5,8 +5,6 @@ import authRouter from './routes/auth.router.js'
 import productRouter from './routes/product.router.js'
 import cartRouter from './routes/cart.router.js'
 import orderRouter from './routes/order.router.js'
-// import productRoutes
-
 
 const app = express()
 

@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import './CartPage.css';
 
 const CartPage = ({ cart, removeFromCart, clearCart }) => {
@@ -7,15 +8,22 @@ const CartPage = ({ cart, removeFromCart, clearCart }) => {
 
   const handleCheckout = async () => {
     try {
-      const res = await fetch('/api/v1/orders', {
-        method: 'POST',
-        credentials: 'include',
-      });
-
-      if (res.ok) {
+      const token = localStorage.getItem("userToken");
+  
+      const res = await axios.post(
+        '/api/v1/orders',
+        {}, 
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          withCredentials: true,
+        }
+      );
+  
+      if (res.status >= 200 && res.status<300) {
         alert('Order placed successfully!');
         clearCart();
-        navigate('/');
       } else {
         alert('Order failed');
       }
@@ -24,13 +32,11 @@ const CartPage = ({ cart, removeFromCart, clearCart }) => {
       alert('Something went wrong during checkout.');
     }
   };
-
-
-  
+    
 
   const totalPrice = cart.reduce((acc, item) => {
     return acc + item.product.price * item.quantity;
-  }, 0);
+  }, 0).toFixed(2);
 
   return (
     <div className="cart-page">
@@ -50,7 +56,7 @@ const CartPage = ({ cart, removeFromCart, clearCart }) => {
                 <div>
                   <h4>{item.product.title}</h4>
                   <p>Quantity: {item.quantity}</p>
-                  <p>Price: ₹{item.product.price}</p>
+                  <p>Price: ${item.product.price}</p>
                   <button onClick={() => removeFromCart(item.product._id)}>Remove</button>
                 </div>
               </li>
