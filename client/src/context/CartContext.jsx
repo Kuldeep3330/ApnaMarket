@@ -7,14 +7,14 @@ const CartContext = createContext();
 export const useCart = () => useContext(CartContext);
 
 export const CartProvider = ({ children }) => {
-  const [cartItems, setCartItems] = useState([]);
+  const [cart, setCart] = useState([]); // Use consistent naming
   const { isAuthenticated } = useAuth();
 
   const fetchCart = async () => {
     if (!isAuthenticated) return;
     try {
       const res = await axios.get('/api/v1/cart', { withCredentials: true });
-      setCartItems(res.data);
+      setCart(res.data);
     } catch (err) {
       console.error('Failed to fetch cart:', err);
     }
@@ -22,7 +22,7 @@ export const CartProvider = ({ children }) => {
 
   const addToCart = async (productId, quantity = 1) => {
     try {
-      const res = await axios.post(
+      await axios.post(
         '/api/v1/cart',
         { productId, quantity },
         { withCredentials: true }
@@ -36,7 +36,7 @@ export const CartProvider = ({ children }) => {
   const clearCart = async () => {
     try {
       await axios.delete('/api/v1/cart', { withCredentials: true });
-      setCartItems([]);
+      setCart([]);
     } catch (err) {
       console.error('Failed to clear cart:', err);
     }
@@ -47,7 +47,7 @@ export const CartProvider = ({ children }) => {
   }, [isAuthenticated]);
 
   return (
-    <CartContext.Provider value={{ cartItems, fetchCart, addToCart, clearCart }}>
+    <CartContext.Provider value={{ cart, fetchCart, addToCart, clearCart }}>
       {children}
     </CartContext.Provider>
   );
