@@ -4,24 +4,30 @@ import axios from "axios";
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(() => {
+    const storedUser = localStorage.getItem("user");
+    return storedUser ? JSON.parse(storedUser) : null;
+  });
 
   const login = async (email, password) => {
     const { data } = await axios.post("/api/v1/auth/login", { email, password });
     setUser(data.user);
+    localStorage.setItem("user", JSON.stringify(data.user));
     return data;
   };
 
   const signup = async (name, email, password) => {
-    const { data } = await axios.post("/api/v1/auth/register", { name, email, password });
+    const { data } = await axios.post("/api/v1/auth/register", { name, email, password }, { withCredentials: true });
     setUser(data.user);
+    localStorage.setItem("user", JSON.stringify(data.user));
     return data;
   };
 
   const logout = async () => {
     try {
-      await axios.post("/api/v1/auth/logout", {}, { withCredentials: true }); // Optional backend logout
+      await axios.post("/api/v1/auth/logout", {}, { withCredentials: true });
       setUser(null);
+      localStorage.removeItem("user");
     } catch (err) {
       console.error("Logout failed:", err);
     }
