@@ -4,6 +4,7 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import { AuthProvider } from "./context/AuthContext";
 import Navbar from './components/Navbar';
+import ProductsPage from './pages/ProductsPage';
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/products" element={<ProductsPage />} />
           {/* Add your protected and home routes here */}
         </Routes>
       </Router>
