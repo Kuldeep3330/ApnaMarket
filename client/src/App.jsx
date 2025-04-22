@@ -35,8 +35,12 @@ function App() {
   const removeFromCart = (productId) => {
     setCart((prevCart) => prevCart.filter(item => item.product._id !== productId));
   };
-  
+
   const clearCart = () => setCart([]);
+
+  
+  
+  
   return (
     <AuthProvider>
       {/* <CartProvider> */}
