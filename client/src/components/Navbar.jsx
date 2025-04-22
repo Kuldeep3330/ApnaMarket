@@ -4,8 +4,13 @@ import ShoppingCartCheckoutIcon from '@mui/icons-material/ShoppingCartCheckout';
 import "./Navbar.css";
 
 const Navbar = () => {
-    const { user } = useAuth();
+    const { user, logout } = useAuth();
     const navigate = useNavigate();
+
+    const handleLogout = async () => {
+        await logout();
+        navigate('/login');
+      };
 
   return (
     <nav className="navbar">
@@ -18,6 +23,7 @@ const Navbar = () => {
           <>
             <Link to="/cart" className="btn"><ShoppingCartCheckoutIcon/></Link>
             <span className="user">Hi, {user.name}</span>
+            <button onClick={handleLogout} className="btn">Logout</button>
            
           </>
         ) : (

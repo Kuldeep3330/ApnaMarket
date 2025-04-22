@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useCart } from '../context/CartContext';
-import './CartPage.css';
 import { useNavigate } from 'react-router-dom';
+import './CartPage.css';
 
 const CartPage = () => {
-  const { cart, fetchCart } = useCart();
+  const { cart, fetchCart, removeFromCart, clearCart } = useCart();
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
@@ -12,40 +12,27 @@ const CartPage = () => {
     fetchCart().finally(() => setLoading(false));
   }, []);
 
-  const handleRemove = async (itemId) => {
-    await fetch(`/api/v1/cart/${itemId}`, {
-      method: 'DELETE',
-      credentials: 'include',
-    });
-    fetchCart();
-  };
-
-  const handleClearCart = async () => {
-    await fetch('/api/v1/cart', {
-      method: 'DELETE',
-      credentials: 'include',
-    });
-    fetchCart();
-  };
-
   const handleCheckout = async () => {
-    const res = await fetch('/api/v1/orders', {
-      method: 'POST',
-      credentials: 'include',
-    });
+    try {
+      const res = await fetch('/api/v1/orders', {
+        method: 'POST',
+        credentials: 'include',
+      });
 
-    if (res.ok) {
-      alert('Order placed successfully!');
-      fetchCart();
-      navigate('/');
-    } else {
-      alert('Order failed');
+      if (res.ok) {
+        alert('Order placed successfully!');
+        clearCart();
+        navigate('/');
+      } else {
+        alert('Order failed');
+      }
+    } catch (err) {
+      console.error('Checkout error:', err);
+      alert('Something went wrong during checkout.');
     }
   };
 
   if (loading) return <div>Loading...</div>;
-
-  // Handle cart not loaded properly
   if (!Array.isArray(cart)) return <div>Cart failed to load.</div>;
 
   const totalPrice = cart.reduce((acc, item) => {
@@ -74,7 +61,7 @@ const CartPage = () => {
                     <h4>{item.productId.title}</h4>
                     <p>Quantity: {item.quantity}</p>
                     <p>Price: ₹{item.productId.price}</p>
-                    <button onClick={() => handleRemove(item._id)}>Remove</button>
+                    <button onClick={() => removeFromCart(item._id)}>Remove</button>
                   </div>
                 </li>
               ) : null
@@ -82,12 +69,8 @@ const CartPage = () => {
           </ul>
           <h3>Total: ₹{totalPrice}</h3>
           <div className="cart-actions">
-            <button className="clear-btn" onClick={handleClearCart}>
-              Clear Cart
-            </button>
-            <button className="checkout-btn" onClick={handleCheckout}>
-              Checkout
-            </button>
+            <button className="clear-btn" onClick={clearCart}>Clear Cart</button>
+            <button className="checkout-btn" onClick={handleCheckout}>Checkout</button>
           </div>
         </>
       )}

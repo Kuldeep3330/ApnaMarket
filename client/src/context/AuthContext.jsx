@@ -18,9 +18,19 @@ export const AuthProvider = ({ children }) => {
     return data;
   };
 
+  const logout = async () => {
+    try {
+      await axios.post("/api/v1/auth/logout", {}, { withCredentials: true }); // Optional backend logout
+      setUser(null);
+    } catch (err) {
+      console.error("Logout failed:", err);
+    }
+  };
+
+  const isAuthenticated = !!user;
 
   return (
-    <AuthContext.Provider value={{ user, login, signup }}>
+    <AuthContext.Provider value={{ user, login, signup,logout, isAuthenticated }}>
       {children}
     </AuthContext.Provider>
   );
