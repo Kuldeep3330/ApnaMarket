@@ -3,13 +3,13 @@ import { useAuth } from "../context/AuthContext";
 import ShoppingCartCheckoutIcon from '@mui/icons-material/ShoppingCartCheckout';
 import "./Navbar.css";
 
-export default function Navbar() {
-  const { user } = useAuth();
-  const navigate = useNavigate();
+const Navbar = () => {
+    const { user } = useAuth();
+    const navigate = useNavigate();
 
   return (
     <nav className="navbar">
-      <Link to="/" className="logo">ApnaMarket</Link>
+      <Link to="/products" className="logo">ApnaMarket</Link>
 
       <div className="nav-links">
         <Link to="/products">Home</Link>
@@ -28,5 +28,9 @@ export default function Navbar() {
         )}
       </div>
     </nav>
-  );
+  )
 }
+
+export default Navbar
+
+ 

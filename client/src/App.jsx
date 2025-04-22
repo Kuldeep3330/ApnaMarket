@@ -1,10 +1,10 @@
 import './App.css'
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Login from "./pages/Login";
-import Signup from "./pages/Signup";
+import Login from "./pages/auth/Login";
+import Signup from "./pages/auth/Signup";
 import { AuthProvider } from "./context/AuthContext";
 import Navbar from './components/Navbar';
-import ProductsPage from './pages/ProductsPage';
+import ProductsPage from './pages/allProduct/ProductsPage';
 import ProductDetailPage from './pages/ProductDetailPage';
 import { CartProvider } from './context/CartContext';
 import CartPage from './pages/CartPage';

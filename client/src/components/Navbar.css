@@ -4,10 +4,15 @@
     align-items: center;
     background-color: #4f46e5;
     color: white;
-    padding: 1rem 2rem;
+    /* padding: 1rem 2rem; */
+    padding: 10px 20px;
     position: sticky;
     top: 0;
     z-index: 1000;
+    height: 10vh;
+    border-radius: 5px;
+    min-width: 80%;
+    
   }
   
   .logo {
@@ -16,10 +21,11 @@
     text-decoration: none;
     color: white;
     transition: color 0.3s ease;
+    margin-top: 120px;
   }
   
   .logo:hover {
-    color: #e0e7ff;
+    color: #f2f2f2;
   }
   
   .nav-links {
@@ -36,25 +42,25 @@
   }
   
   .nav-links a:hover {
-    color: #dbeafe;
+    color: #f2f2f2;
   }
   
   .btn {
-    background: rgb(85, 84, 84);
+    /* background: rgb(85, 84, 84); */
     color: black;
     padding: 0.5rem 1rem;
     border: none;
     border-radius: 6px;
     text-decoration: none;
     cursor: pointer;
-    font-weight: bold;    
-    transition: background-color 0.3s ease, color 0.3s ease;
+    font-weight: bold;
   }
   
-  /* .btn:hover {
-    background-color: #e0e7ff;
-    color: #1e3a8a;
-  } */
+  .btn:hover {
+    background-color: #b6c4f2;
+    /* color: #27272a; */      
+    transition: all 0.3s ease;
+  }
   
   .user {
     margin-left: 1rem;
